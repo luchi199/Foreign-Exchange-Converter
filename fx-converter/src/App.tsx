@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Outlet } from "react-router";
 
 function App() {
   const [sendValue, setSendValue] = useState<string>("");
@@ -27,6 +28,8 @@ function App() {
         value={receiveValue}
         onChange={(e) => setReceiveValue(e.target.value)}
       />
+
+      <Outlet />
     </>
   );
 }
