@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<App />}>
           <Route index element={<HistoryPage />} />
           <Route path="compare" element={<ComparePage />} />
-          <Route path="favourites" element={<FavoritesPage />} />
+          <Route path="favorites" element={<FavoritesPage />} />
           <Route path="log" element={<LogPage />} />
         </Route>
       </Routes>
