@@ -1,48 +1,49 @@
 import { useState } from "react";
-import { Outlet } from "react-router";
-import { NavLink } from "react-router";
-import { getRates } from "./services/api";
+import { NavLink, Outlet } from "react-router";
+import { getCurrencies, convert } from "./services/api";
+import type { currenciesTypes } from "./services/api";
+import { useEffect } from "react";
 
 function App() {
-  const [sendValue, setSendValue] = useState<object>({
-    value: "",
-    currency: "",
-  });
-  const [receiveValue, setReceiveValue] = useState<object>({
-    value: "",
-    currency: "",
-  });
+  const [currencies, setCurrencies] = useState<Array<currenciesTypes>>([]);
 
-  function swapValues() {
-    const prev = sendValue;
-    setSendValue(receiveValue);
-    setReceiveValue(prev);
-  }
+  useEffect(() => {
+    async function displayCurrencies() {
+      const data = await getCurrencies();
+      setCurrencies(data);
+    }
+    displayCurrencies();
+  }, []);
 
   return (
     <>
       <h1>Hello world</h1>
 
       <div>
-        <input name="sent" type="number" />
+        <input name="sent" type="number" placeholder="0" />
 
         <select name="sent">
-          <option value="usd">US Dollar</option>
-          <option value="eur">Euro</option>
-          <option value="gbp">British Pound</option>
+          {currencies.map((currency: currenciesTypes) => (
+            <option key={currency.iso_code} value={currency.iso_code}>
+              {currency.iso_code} {currency.name}
+            </option>
+          ))}
         </select>
       </div>
-      <button type="button" onClick={swapValues}>
-        swap
-      </button>
+
+      <button type="button">swap</button>
+
       <div>
-        <input name="receive" type="number" />
+        <input name="receive" type="number" placeholder="0" />
         <select name="receive">
-          <option value="usd">US Dollar</option>
-          <option value="eur">Euro</option>
-          <option value="gbp">British Pound</option>
+          {currencies.map((currency: currenciesTypes) => (
+            <option key={currency.iso_code} value={currency.iso_code}>
+              {currency.iso_code} {currency.name}
+            </option>
+          ))}
         </select>
       </div>
+
       <NavLink to="/">History</NavLink>
       <NavLink to="/compare">Compare</NavLink>
       <NavLink to="/favorites">Favorites</NavLink>
