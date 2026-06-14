@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Outlet } from "react-router";
 import { NavLink } from "react-router";
-import { useLocation } from "react-router";
+import { getRates } from "./services/api";
 
 function App() {
-  const location = useLocation();
-  const [sendValue, setSendValue] = useState<string>("");
-  const [receiveValue, setReceiveValue] = useState<string>("");
+  const [sendValue, setSendValue] = useState<object>({
+    value: "",
+    currency: "",
+  });
+  const [receiveValue, setReceiveValue] = useState<object>({
+    value: "",
+    currency: "",
+  });
 
   function swapValues() {
     const prev = sendValue;
@@ -19,23 +24,25 @@ function App() {
       <h1>Hello world</h1>
 
       <div>
-        <input
-          type="number"
-          value={sendValue}
-          onChange={(e) => setSendValue(e.target.value)}
-        />
+        <input name="sent" type="number" />
 
-        <select name="" id=""></select>
+        <select name="sent">
+          <option value="usd">US Dollar</option>
+          <option value="eur">Euro</option>
+          <option value="gbp">British Pound</option>
+        </select>
       </div>
       <button type="button" onClick={swapValues}>
         swap
       </button>
-      <input
-        type="number"
-        value={receiveValue}
-        onChange={(e) => setReceiveValue(e.target.value)}
-      />
-
+      <div>
+        <input name="receive" type="number" />
+        <select name="receive">
+          <option value="usd">US Dollar</option>
+          <option value="eur">Euro</option>
+          <option value="gbp">British Pound</option>
+        </select>
+      </div>
       <NavLink to="/">History</NavLink>
       <NavLink to="/compare">Compare</NavLink>
       <NavLink to="/favorites">Favorites</NavLink>
