@@ -57,8 +57,8 @@ export async function convert(
     }
 
     const data = await res.json();
-    console.log(data);
-    return amount * data.rate;
+    const result: number = amount * data.rate;
+    return result;
   } catch (error) {
     console.error("Failed to convert values:", error);
   }
