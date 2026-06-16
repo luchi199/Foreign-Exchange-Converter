@@ -1,1 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --color-neutral-900: #0a0a0a;
+  --color-neutral-700: #171719;
+  --color-neutral-600: #202022;
+  --color-neutral-500: #2e2e2e;
+  --color-neutral-400: #3d3d3d;
+  --color-neutral-300: #454547;
+  --color-neutral-200: #9d9d9d;
+  --color-neutral-100: #c6c6c6;
+  --color-neutral-50: #ffffff;
+
+  --color-lime-800: #283300;
+  --color-lime-500: #cef739;
+
+  --color-green-500: #42eb05;
+
+  --color-red-500: #ff4141;
+}
+
+.text-preset-1 {
+  @apply font-bold text-[40px] leading-[100%] tracking-[-0.5px];
+}
+
+.text-preset-tablet-1 {
+  @apply font-bold text-[32px] leading-[100%] tracking-[-0.5px];
+}
+
+.text-preset-2 {
+  @apply text-xl leading-[120%] tracking-[-0.5px];
+}
+
+.text-preset-bold-2 {
+  @apply font-bold text-xl leading-[140%] tracking-[-0.5px];
+}
+
+.text-preset-3 {
+  @apply text-base leading-[120%] tracking-[1px];
+}
+
+.text-preset-medium-3 {
+  @apply font-medium text-base leading-[120%] tracking-[1px];
+}
+
+.text-preset-bold-3 {
+  @apply font-bold text-base leading-[110%] tracking-[1px];
+}
+
+.text-preset-4 {
+  @apply text-sm leading-[120%] tracking-[1px];
+}
+
+.text-preset-5 {
+  @apply text-xs leading-[120%] tracking-[0.5px];
+}
+
+.text-preset-medium-5 {
+  @apply font-medium text-xs leading-[130%] tracking-[0.5px];
+}
+
+.text-preset-6 {
+  @apply text-[10px] leading-[100%] tracking-normal;
+}

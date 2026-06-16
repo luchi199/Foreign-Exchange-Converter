@@ -47,7 +47,7 @@ function App() {
 
   return (
     <>
-      <h1 className="bg-red-300">Hello world</h1>
+      <h1 className="bg-red-300 text-preset-4">Hello world</h1>
 
       <div>
         <input
