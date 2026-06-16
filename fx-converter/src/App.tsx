@@ -4,6 +4,7 @@ import { getCurrencies, convert } from "./services/api";
 import type { currenciesTypes } from "./services/api";
 
 function App() {
+  //#region
   const [currencies, setCurrencies] = useState<Array<currenciesTypes>>([]);
   const [sentInputValue, setSentInputValue] = useState<string>("");
   const [receiveInputValue, setReceiveInputValue] = useState<string>("");
@@ -42,10 +43,11 @@ function App() {
     setSentSelectValue(receiveSelectValue);
     setReceiveSelectValue(temp);
   }
+  // #endregion
 
   return (
     <>
-      <h1>Hello world</h1>
+      <h1 className="bg-red-300">Hello world</h1>
 
       <div>
         <input
