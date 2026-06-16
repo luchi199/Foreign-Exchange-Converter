@@ -1,36 +1,46 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { NavLink, Outlet } from "react-router";
 import { getCurrencies, convert } from "./services/api";
 import type { currenciesTypes } from "./services/api";
 
 function App() {
   const [currencies, setCurrencies] = useState<Array<currenciesTypes>>([]);
-  const [sentCurrency, setSentCurrency] = useState<string>("USD");
-  const [recieveCurrency, setReceiveCurrency] = useState<string>("EUR");
-  const receiveInputRef = useRef<HTMLInputElement>(null);
+  const [sentInputValue, setSentInputValue] = useState<string>("");
+  const [receiveInputValue, setReceiveInputValue] = useState<string>("");
+  const [sentSelectValue, setSentSelectValue] = useState<string>("USD");
+  const [receiveSelectValue, setReceiveSelectValue] = useState<string>("EUR");
 
   useEffect(() => {
-    async function displayCurrencies() {
+    async function fetchCurrencies() {
       const data = await getCurrencies();
       setCurrencies(data);
     }
-    displayCurrencies();
+    fetchCurrencies();
   }, []);
 
-  async function convertSend(sentInputValue?: string) {
-    let conversionValue;
-    if (sentInputValue) {
-      conversionValue = await convert(
-        sentCurrency,
-        recieveCurrency,
-        parseInt(sentInputValue),
-      );
-    }
+  const convertValues = useCallback(async () => {
+    if (!sentInputValue) return;
 
-    if (conversionValue && receiveInputRef.current) {
-      console.log(conversionValue);
-      receiveInputRef.current.value = conversionValue.toString();
+    const conversionValue = await convert(
+      sentSelectValue,
+      receiveSelectValue,
+      parseInt(sentInputValue),
+    );
+
+    if (conversionValue) {
+      setReceiveInputValue(conversionValue.toString());
     }
+  }, [sentSelectValue, receiveSelectValue, sentInputValue]);
+
+  useEffect(() => {
+    convertValues();
+  }, [convertValues]);
+
+  function swapValues() {
+    const temp = sentSelectValue;
+
+    setSentSelectValue(receiveSelectValue);
+    setReceiveSelectValue(temp);
   }
 
   return (
@@ -42,16 +52,14 @@ function App() {
           name="sent"
           type="number"
           placeholder="0"
-          onChange={async (e) => await convertSend(e.target.value)}
+          value={sentInputValue}
+          onChange={(e) => setSentInputValue(e.currentTarget.value)}
         />
 
         <select
           name="sent"
-          defaultValue="USD"
-          onChange={(e) => {
-            setSentCurrency(e.target.value);
-            convertSend();
-          }}
+          value={sentSelectValue}
+          onChange={(e) => setSentSelectValue(e.currentTarget.value)}
         >
           {currencies.map((currency: currenciesTypes) => (
             <option key={currency.iso_code} value={currency.iso_code}>
@@ -61,22 +69,22 @@ function App() {
         </select>
       </div>
 
-      <button type="button">swap</button>
+      <button type="button" onClick={swapValues}>
+        swap
+      </button>
 
       <div>
         <input
-          ref={receiveInputRef}
           name="receive"
           type="number"
           placeholder="0"
+          value={receiveInputValue}
+          readOnly
         />
         <select
           name="receive"
-          defaultValue="EUR"
-          onChange={(e) => {
-            setReceiveCurrency(e.target.value);
-            convertSend();
-          }}
+          value={receiveSelectValue}
+          onChange={(e) => setReceiveSelectValue(e.currentTarget.value)}
         >
           {currencies.map((currency: currenciesTypes) => (
             <option key={currency.iso_code} value={currency.iso_code}>
