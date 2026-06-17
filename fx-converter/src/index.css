@@ -2,6 +2,8 @@
 @import "tailwindcss";
 
 @theme {
+  --font-jetbrains: "JetBrains Mono", monospace;
+
   --color-neutral-900: #0a0a0a;
   --color-neutral-700: #171719;
   --color-neutral-600: #202022;
