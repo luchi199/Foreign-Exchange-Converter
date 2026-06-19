@@ -20,8 +20,20 @@
   --color-green-500: #42eb05;
 
   --color-red-500: #ff4141;
+
+  --animate-infinite-scroll: infinite-scroll 150s linear infinite;
+
+  @keyframes infinite-scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
 }
 
+/* Text presets */
 .text-preset-1 {
   @apply font-bold text-[40px] leading-[100%] tracking-[-0.5px];
 }

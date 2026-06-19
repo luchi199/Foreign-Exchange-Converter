@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { NavLink, Outlet } from "react-router";
-import { getCurrencies, convert } from "./services/api";
-import type { currenciesTypes } from "./services/api";
+import { getCurrencies, convert, getRates } from "./services/api";
+import type { currenciesTypes, ratesTypes } from "./services/api";
 import logo from "./assets/images/logo.svg";
 import exchange from "./assets/images/icon-exchange.svg";
 
 function App() {
   //#region
   const [currencies, setCurrencies] = useState<Array<currenciesTypes>>([]);
+  const [rates, setRates] = useState<Array<ratesTypes>>([]);
   const [sentInputValue, setSentInputValue] = useState<string>("");
   const [receiveInputValue, setReceiveInputValue] = useState<string>("");
   const [sentSelectValue, setSentSelectValue] = useState<string>("USD");
@@ -20,6 +21,14 @@ function App() {
     }
     fetchCurrencies();
   }, []);
+
+  useEffect(() => {
+    async function fetchRates() {
+      const data = await getRates(sentSelectValue);
+      setRates(data);
+    }
+    fetchRates();
+  }, [sentSelectValue]);
 
   const convertValues = useCallback(async () => {
     if (!sentInputValue) return;
@@ -56,6 +65,32 @@ function App() {
             {currencies.length} currencies · eod · ecb data
           </p>
         </div>
+        <div className="flex w-full h-max">
+          <div className="flex items-center gap-2 bg-lime-500 p-2 py-3 w-fit">
+            <div className="relative flex size-2">
+              <div className="inline-flex absolute bg-neutral-900 opacity-20 rounded-full w-full h-full animate-ping"></div>
+              <div className="inline-flex bg-neutral-900 rounded-full size-2"></div>
+            </div>
+            <p className="text-preset-6 uppercase text-nowrap">live markets</p>
+          </div>
+
+          <div className="flex bg-neutral-700 w-full overflow-hidden">
+            <ul className="flex items-center h-full animate-infinite-scroll">
+              {[...rates].map((rate: ratesTypes) => (
+                <li
+                  key={`rate-${rate.quote}`}
+                  className="flex items-center gap-2.5 p-3 border-neutral-500 border-r text-preset-6"
+                >
+                  <p className="text-neutral-200">
+                    {rate.base}/{rate.quote}
+                  </p>
+                  <p className="text-neutral-50">{rate.rate}</p>
+                  <p>{}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </header>
 
       <main className="flex-1 mx-auto md:p-6 px-4 py-8 md:py-12 w-full max-w-275">
@@ -65,8 +100,8 @@ function App() {
           </h1>
 
           <div className="bg-neutral-700 shadow-[0_12px_40px_rgba(0,0,0,0.40)] rounded-[20px] w-full">
-            <div className="flex flex-col flex-wrap justify-center items-center gap-4 p-4 w-full">
-              <section className="flex flex-col gap-5 bg-neutral-600 p-4 border border-neutral-500 rounded-2xl w-full h-max grow basis-78">
+            <div className="flex flex-wrap items-center gap-4 p-4 w-full">
+              <section className="flex flex-col flex-1 gap-5 bg-neutral-600 p-4 border border-neutral-500 rounded-2xl w-full h-max basis-xs">
                 <h2 className="text-neutral-100 text-preset-4 uppercase">
                   send
                 </h2>
@@ -78,7 +113,7 @@ function App() {
                     placeholder="0"
                     value={sentInputValue}
                     onChange={(e) => setSentInputValue(e.currentTarget.value)}
-                    className="focus:shadow-[0_0_0_4px_#cef739] rounded-lg outline-none w-30 text-neutral-50 text-preset-tablet-1 placeholder:text-neutral-200 decoration-1 decoration-neutral-200 hover:underline underline-offset-3"
+                    className="focus:shadow-[0_0_0_4px_#cef739] rounded-lg outline-none w-30 text-neutral-50 text-preset-tablet-1 placeholder:text-neutral-200 decoration-1 decoration-neutral-200 not-focus:hover:underline underline-offset-3"
                   />
                   <select
                     name="sent"

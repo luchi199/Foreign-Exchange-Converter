@@ -9,9 +9,16 @@ export interface currenciesTypes {
   end_date: Date;
 }
 
-export async function getRates() {
+export interface ratesTypes {
+  base: string;
+  date: Date;
+  quote: string;
+  rate: number;
+}
+
+export async function getRates(base: string = "USD") {
   try {
-    const res = await fetch(`${API_BASE_URL}/rates?base=USD`);
+    const res = await fetch(`${API_BASE_URL}/rates?base=${base}`);
 
     if (!res.ok) {
       throw new Error(
