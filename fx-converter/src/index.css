@@ -33,6 +33,14 @@
   }
 }
 
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
 /* Text presets */
 .text-preset-1 {
   @apply font-bold text-[40px] leading-[100%] tracking-[-0.5px];
